@@ -1,0 +1,38 @@
+body {
+ background-color: #D4EFDF;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+h1{
+  color: brown;
+}
+
+#board {
+  position: relative;
+  width: 60vw;
+  height: 70vh;
+  outline: 1px solid black;
+  margin: auto;
+  padding: 5px;
+}
+
+.hobbit{
+  background-color: green;
+  position: absolute;
+}
+
+.orc{
+  background-color: black;
+  position: absolute;
+}
+
+.team{
+  background-color:purple;
+  position: absolute;
+}
