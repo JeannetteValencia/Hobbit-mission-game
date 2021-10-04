@@ -12,64 +12,22 @@ class Challenge {
     this.hobbit.create();
     this.hobbit.draw();
     this.addEventListeners();
+    this.updateObstacle();
+    this.updateTeam();
 
     setInterval(()=> {
       this.currentTime++;
 
-      //Orcs apppearance
-      if (this.currentTime % 8 === 0){
-        const newOrc = new Orcs ();
-        newOrc.create();
-        this.orcsArr.push(newOrc);
+      this.updateObstacle();
+
+      this.updateTeam();
+
+      //scores record
+      if (this.points > 0){
+        document.getElementById("points").innerHTML = `Score: ${this.points} points`;
+      } else {
+        alert ("Game Over")
       }
-
-      this.orcsArr.forEach( (orc) => {
-        orc.moveDown();
-        orc.draw();
-
-        //Fatal colission detention orc-hobbit
-        if (orc.y <= 90){
-          if (this.hobbit.x < orc.x + orc.width && this.hobbit.x + this.hobbit.width > orc.x && orc.y < this.hobbit.y + this.hobbit.height && orc.y + orc.height > this.hobbit.y){
-            console.log ("Run Hobbit!")
-            this.points = this.points - 2;
-            orc.remove();
-            this.orcsArr.shift();
-            return this.points;
-          }
-        } else {
-            orc.remove();
-            this.orcsArr.shift();
-        }
-      });
-
-     document.getElementById("points").innerHTML = `Score: ${this.points} points`;
-
-      //The Fellowship of the Ring Team Creation
-      if (this.currentTime % 10 === 0) {
-        const newTeam = new Team ();
-        if (this.teamArr.length === 0){
-          newTeam.create();
-          newTeam.draw();
-          this.teamArr.push(newTeam);
-        }
-      }
-
-      //Great collision detention hobbit-team
-      this.teamArr.forEach((team)=>{
-        if (this.hobbit.x< team.x + team.width && this.hobbit.x + this.hobbit.width > team.x && team.y < this.hobbit.y + this.hobbit.height && team.y + team.height >this.hobbit.y){
-          console.log("Great you've got 10 points!")
-          this.points = this.points + 10;
-          document.getElementById("points").innerHTML = `Score: ${this.points} points`;
-          team.remove();
-          this.teamArr.shift();
-        }
-      })
-
-      if (this.points === 0){
-         alert ("Game Over")
-      }
-
-
     },300)
   }
 
@@ -95,6 +53,54 @@ class Challenge {
     })
   }
 
+  updateObstacle(){
+    //Orcs apppearance
+    if (this.currentTime % 8 === 0){
+      const newOrc = new Orcs ();
+      newOrc.create();
+      this.orcsArr.push(newOrc);
+    }
+
+    this.orcsArr.forEach( (orc,index) => {
+      orc.moveDown();
+      orc.draw();
+
+      //Fatal colission detention orc-hobbit
+      if (orc.y <= 90){
+        if (this.hobbit.x < orc.x + orc.width && this.hobbit.x + this.hobbit.width > orc.x && orc.y < this.hobbit.y + this.hobbit.height && orc.y + orc.height > this.hobbit.y){
+          console.log ("Run Hobbit!")
+          this.points = this.points - 2;
+          orc.remove();
+          this.orcsArr.splice(index,1);
+        }
+      } else {
+          orc.remove();
+          this.orcsArr.shift();
+      }
+    });
+  }
+
+  updateTeam(){
+    //The Fellowship of the Ring Team Creation
+    if (this.currentTime % 10 === 0) {
+      const newTeam = new Team ();
+      if (this.teamArr.length === 0){
+        newTeam.create();
+        newTeam.draw();
+        this.teamArr.push(newTeam);
+      }
+    }
+
+    //Great collision detention hobbit-team
+    this.teamArr.forEach((team, index)=>{
+      if (this.hobbit.x< team.x + team.width && this.hobbit.x + this.hobbit.width > team.x && team.y < this.hobbit.y + this.hobbit.height && team.y + team.height >this.hobbit.y){
+        console.log("Great you've got 10 points!")
+        this.points = this.points + 10;
+        team.remove();
+        this.teamArr.splice(index,1);
+      }
+    })
+  }
 }
 
 class Components {
