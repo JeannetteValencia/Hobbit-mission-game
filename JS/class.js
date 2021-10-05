@@ -3,7 +3,7 @@ class Challenge {
     this.currentTime= 0;
     this.hobbit = null;
     this.orcsArr = [];
-    this.teamArr = [];
+    this.weaponArr = [];
     this.points = 10;
   }
 
@@ -13,20 +13,20 @@ class Challenge {
     this.hobbit.draw();
     this.addEventListeners();
     this.updateObstacle();
-    this.updateTeam();
+    this.updateWeapon();
 
     setInterval(()=> {
       this.currentTime++;
 
       this.updateObstacle();
 
-      this.updateTeam();
+      this.updateWeapon();
 
       //scores record
       if (this.points > 0){
         document.getElementById("points").innerHTML = `Score: ${this.points} points`;
       } else {
-        alert ("Game Over")
+        //alert ("Game Over")
       }
     },300)
   }
@@ -56,7 +56,7 @@ class Challenge {
   updateObstacle(){
     //Orcs apppearance
     if (this.currentTime % 8 === 0){
-      const newOrc = new Orcs ();
+      const newOrc = new Orc ();
       newOrc.create();
       this.orcsArr.push(newOrc);
     }
@@ -80,24 +80,24 @@ class Challenge {
     });
   }
 
-  updateTeam(){
-    //The Fellowship of the Ring Team Creation
+  updateWeapon(){
+    //The Fellowship of the Ring Weapon Creation
     if (this.currentTime % 10 === 0) {
-      const newTeam = new Team ();
-      if (this.teamArr.length === 0){
-        newTeam.create();
-        newTeam.draw();
-        this.teamArr.push(newTeam);
+      const newWeapon = new Weapon ();
+      if (this.weaponArr.length === 0){
+        newWeapon.create();
+        newWeapon.draw();
+        this.weaponArr.push(newWeapon);
       }
     }
 
-    //Great collision detention hobbit-team
-    this.teamArr.forEach((team, index)=>{
-      if (this.hobbit.x< team.x + team.width && this.hobbit.x + this.hobbit.width > team.x && team.y < this.hobbit.y + this.hobbit.height && team.y + team.height >this.hobbit.y){
+    //Great collision detention hobbit-weapon
+    this.weaponArr.forEach((weapon, index)=>{
+      if (this.hobbit.x< weapon.x + weapon.width && this.hobbit.x + this.hobbit.width > weapon.x && weapon.y < this.hobbit.y + this.hobbit.height && weapon.y + weapon.height >this.hobbit.y){
         console.log("Great you've got 10 points!")
         this.points = this.points + 10;
-        team.remove();
-        this.teamArr.splice(index,1);
+        weapon.remove();
+        this.weaponArr.splice(index,1);
       }
     })
   }
@@ -161,11 +161,11 @@ class Hobbit extends Components {
   }
 }
 
-class Orcs extends Components{
+class Orc extends Components{
  constructor (){
     super();
-    this.width = Math.floor(Math.random()*(20-10+1)+10);;
-    this.height = 10;
+    this.width = 10;
+    this.height = 15;
     this.x = Math.floor(Math.random()*(100-this.width+1));
     this.y = 0;
     this.className = "orc";
@@ -176,13 +176,13 @@ class Orcs extends Components{
   }
 }
 
-class Team extends Components{
+class Weapon extends Components{
   constructor(){
     super();
     this.width= 10;
-    this.height= 5;
+    this.height= 20;
     this.x= Math.floor(Math.random()*(100-this.width+1));
     this.y= Math.floor(Math.random()*(100-this.height+1));
-    this.className = "team";
+    this.className = "weapon";
   }
 }

@@ -1,5 +1,7 @@
 body {
- background-color: #D4EFDF;
+  margin: 50px;
+  background-image: url("./images/middle-earth.jpeg");
+  background-size: cover;
 }
 
 .header {
@@ -10,29 +12,34 @@ body {
 }
 
 h1{
-  color: brown;
+  color:brown;
 }
 
 #board {
   position: relative;
   width: 60vw;
   height: 70vh;
-  outline: 1px solid black;
+  outline: 3px solid black;
   margin: auto;
   padding: 5px;
+  background-image: url("./images/background.jpg");
 }
 
 .hobbit{
-  background-color: green;
+/*  background-color: green;*/
   position: absolute;
+  background-image: url("./images/bilbo.png");
+  background-size: cover;
 }
 
 .orc{
-  background-color: black;
   position: absolute;
+  background-image: url("./images/orcs1.png");
+  background-size: cover;
 }
 
-.team{
-  background-color:purple;
+.weapon{
   position: absolute;
+  background-image: url("./images/arc.png");
+  background-size: 100%;
 }
