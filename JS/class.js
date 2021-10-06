@@ -16,7 +16,7 @@ class Challenge {
     this.addEventListeners();
     this.updateObstacle();
     this.updateWeapon();
-    //this.shooting();
+   // this.shooting();
 
     setInterval(()=> {
       this.currentTime++;
@@ -36,10 +36,9 @@ class Challenge {
 
   //to read which arrow is pressed
   addEventListeners(){
-    document.addEventListener("keydown",(event) =>{ //use arrow function so "this" refers to this class, not the document
-      //read keycode left or right, the property Key can be useful
+    document.addEventListener("keydown",(event) =>{
       if(event.key === "ArrowLeft") {
-        this.hobbit.moveLeft(); 
+        this.hobbit.moveLeft();
         this.hobbit.draw();
       } else if (event.key === "ArrowRight") {
          this.hobbit.moveRight();
@@ -88,7 +87,6 @@ class Challenge {
       }
     });
 
-    
   }
 
   updateWeapon(){
@@ -102,7 +100,7 @@ class Challenge {
       }
     }
 
-    //Great collision detection hobbit-weapon
+    //Hobbit-weapon collision detection
     this.weaponArr.forEach((weapon, index)=>{
       if (this.hobbit.x< weapon.x + weapon.width && this.hobbit.x + this.hobbit.width > weapon.x && weapon.y < this.hobbit.y + this.hobbit.height && weapon.y + weapon.height >this.hobbit.y){
         console.log("Great you've got 10 points!")
@@ -115,32 +113,33 @@ class Challenge {
 
   shooting (){
     if (this.bulletArr.length >= 0){
-      const bullet = new Bullet();
-      bullet.create();;
-      bullet.x = this.hobbit.x;
-      bullet.y = this.hobbit.y;
-      console.log(`this is bullet x ${bullet.x}`);
-      console.log (`this is hobbit x ${this.hobbit.x}`);
+      const bullet = new Bullet(this.hobbit.x, this.hobbit.y);
+      bullet.create();
       this.bulletArr.push(bullet);
-      this.bulletArr.forEach((bullet,index)=>{
-        bullet.bulletUp();
-        bullet.draw();
-      })
+      setInterval(()=>{
+        if (bullet.y>5){
+          this.bulletArr.forEach((bullet)=>{
+            bullet.bulletUp();
+            bullet.draw();
+          })
+        }
+      },300)
 
     //Bullet-orc collision detection bullet-orc
       this.orcsArr.forEach((orc, oIndex)=>{
         this.bulletArr.forEach((bullet, bIndex)=>{
           if (bullet.x < orc.x + orc.width && bullet.x + bullet.width > orc.x && orc.y < bullet.y + bullet.height && orc.y + orc.height > bullet.y){
-            console.log ("BULLET")
+            console.log ("You now have 5 points")
             this.points = this.points + 5;
-            bullet.remove();
             orc.remove();
-            this.bulletArr.splice(bIndex,1);
             this.orcsArr.splice(oIndex, 1);
+            bullet.remove();
+            this.bulletArr.splice(bIndex,1);
           }
         })
       })
     }
+    bullet.remove();
   }
 
 }
@@ -230,17 +229,18 @@ class Weapon extends Components{
 }
 
 class Bullet extends Components {
-  constructor(){
+  constructor(x, y){
     super();
     this.width= 2;
     this.height= 5;
-    this.x= null;
-    this.y= null;
+    this.x= x;
+    this.y= y;
     this.className = "bullet";
   }
 
   bulletUp(){
-    this.y-= 5;
-    console.log ("bullet")
+    if (this.y > 0){
+      this.y-= 5;
+    }
   }
 }
