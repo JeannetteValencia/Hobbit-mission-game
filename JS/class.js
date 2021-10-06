@@ -2,8 +2,10 @@ class Challenge {
   constructor (){
     this.currentTime= 0;
     this.hobbit = null;
+    this.bullet = null;
     this.orcsArr = [];
     this.weaponArr = [];
+    this.bulletArr=[];
     this.points = 10;
   }
 
@@ -14,6 +16,7 @@ class Challenge {
     this.addEventListeners();
     this.updateObstacle();
     this.updateWeapon();
+    //this.shooting();
 
     setInterval(()=> {
       this.currentTime++;
@@ -36,7 +39,7 @@ class Challenge {
     document.addEventListener("keydown",(event) =>{ //use arrow function so "this" refers to this class, not the document
       //read keycode left or right, the property Key can be useful
       if(event.key === "ArrowLeft") {
-        this.hobbit.moveLeft(); //I am calling the instance that
+        this.hobbit.moveLeft(); 
         this.hobbit.draw();
       } else if (event.key === "ArrowRight") {
          this.hobbit.moveRight();
@@ -47,8 +50,14 @@ class Challenge {
       } else if (event.key === "ArrowDown"){
          this.hobbit.moveDown();
          this.hobbit.draw();
-      } else {
+      } /*else {
         alert ("Please press an arrow key");
+      }*/
+    })
+    document.addEventListener('keyup', event => {
+      if (event.code === 'Space') {
+        console.log('Space pressed');
+        this.shooting();
       }
     })
   }
@@ -65,7 +74,7 @@ class Challenge {
       orc.moveDown();
       orc.draw();
 
-      //Fatal colission detention orc-hobbit
+      //orc-hobbit colission detection
       if (orc.y <= 90){
         if (this.hobbit.x < orc.x + orc.width && this.hobbit.x + this.hobbit.width > orc.x && orc.y < this.hobbit.y + this.hobbit.height && orc.y + orc.height > this.hobbit.y){
           console.log ("Run Hobbit!")
@@ -78,6 +87,8 @@ class Challenge {
           this.orcsArr.shift();
       }
     });
+
+    
   }
 
   updateWeapon(){
@@ -91,7 +102,7 @@ class Challenge {
       }
     }
 
-    //Great collision detention hobbit-weapon
+    //Great collision detection hobbit-weapon
     this.weaponArr.forEach((weapon, index)=>{
       if (this.hobbit.x< weapon.x + weapon.width && this.hobbit.x + this.hobbit.width > weapon.x && weapon.y < this.hobbit.y + this.hobbit.height && weapon.y + weapon.height >this.hobbit.y){
         console.log("Great you've got 10 points!")
@@ -101,6 +112,37 @@ class Challenge {
       }
     })
   }
+
+  shooting (){
+    if (this.bulletArr.length >= 0){
+      const bullet = new Bullet();
+      bullet.create();;
+      bullet.x = this.hobbit.x;
+      bullet.y = this.hobbit.y;
+      console.log(`this is bullet x ${bullet.x}`);
+      console.log (`this is hobbit x ${this.hobbit.x}`);
+      this.bulletArr.push(bullet);
+      this.bulletArr.forEach((bullet,index)=>{
+        bullet.bulletUp();
+        bullet.draw();
+      })
+
+    //Bullet-orc collision detection bullet-orc
+      this.orcsArr.forEach((orc, oIndex)=>{
+        this.bulletArr.forEach((bullet, bIndex)=>{
+          if (bullet.x < orc.x + orc.width && bullet.x + bullet.width > orc.x && orc.y < bullet.y + bullet.height && orc.y + orc.height > bullet.y){
+            console.log ("BULLET")
+            this.points = this.points + 5;
+            bullet.remove();
+            orc.remove();
+            this.bulletArr.splice(bIndex,1);
+            this.orcsArr.splice(oIndex, 1);
+          }
+        })
+      })
+    }
+  }
+
 }
 
 class Components {
@@ -184,5 +226,21 @@ class Weapon extends Components{
     this.x= Math.floor(Math.random()*(100-this.width+1));
     this.y= Math.floor(Math.random()*(100-this.height+1));
     this.className = "weapon";
+  }
+}
+
+class Bullet extends Components {
+  constructor(){
+    super();
+    this.width= 2;
+    this.height= 5;
+    this.x= null;
+    this.y= null;
+    this.className = "bullet";
+  }
+
+  bulletUp(){
+    this.y-= 5;
+    console.log ("bullet")
   }
 }
