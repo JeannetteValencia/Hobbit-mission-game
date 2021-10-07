@@ -1,4 +1,4 @@
-class Challenge {
+class Mission {
   constructor (){
     this.currentTime= 0;
     this.hobbit = null;
@@ -56,6 +56,10 @@ class Challenge {
     document.addEventListener('keyup', event => {
       if (event.code === 'Space') {
         console.log('Space pressed');
+        const bullet = new Bullet(this.hobbit.x, this.hobbit.y);
+        bullet.create();
+        this.bulletArr.push(bullet);
+
         this.shooting();
       }
     })
@@ -112,22 +116,13 @@ class Challenge {
   }
 
   shooting (){
-    if (this.bulletArr.length >= 0){
-      const bullet = new Bullet(this.hobbit.x, this.hobbit.y);
-      bullet.create();
-      this.bulletArr.push(bullet);
-      setInterval(()=>{
-        if (bullet.y>5){
-          this.bulletArr.forEach((bullet)=>{
-            bullet.bulletUp();
-            bullet.draw();
-          })
-        }
-      },300)
+    setInterval(() => {
+      //Bullet-orc collision detection bullet-orc
+      this.bulletArr.forEach((bullet, bIndex)=>{
+        bullet.bulletUp();
+        bullet.draw();
 
-    //Bullet-orc collision detection bullet-orc
-      this.orcsArr.forEach((orc, oIndex)=>{
-        this.bulletArr.forEach((bullet, bIndex)=>{
+        this.orcsArr.forEach((orc, oIndex)=>{
           if (bullet.x < orc.x + orc.width && bullet.x + bullet.width > orc.x && orc.y < bullet.y + bullet.height && orc.y + orc.height > bullet.y){
             console.log ("You now have 5 points")
             this.points = this.points + 5;
@@ -137,9 +132,13 @@ class Challenge {
             this.bulletArr.splice(bIndex,1);
           }
         })
+
+        if (bullet.y = 0) {
+          bullet.remove();
+          this.bulletArr.shift();
+        }
       })
-    }
-    bullet.remove();
+    }, 200);
   }
 
 }

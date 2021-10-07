@@ -1,2 +1,2 @@
-const myGame = new Challenge();
+const myGame = new Mission();
 myGame.startMission();
