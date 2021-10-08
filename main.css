@@ -3,6 +3,7 @@ body {
   background-image: url("./images/middle-earth.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
+  font-family: 'Explora', cursive;
 }
 
 .header {
@@ -16,7 +17,12 @@ h1{
   color:brown;
 }
 
-#board {
+#instructions {
+  display: flex;
+  flex-direction: column;
+}
+
+#intro {
   position: relative;
   width: 60vw;
   height: 70vh;
@@ -24,32 +30,36 @@ h1{
   margin: auto;
   padding: 5px;
   background-image: url("./images/background.jpg");
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
 }
 
-.hobbit{
-/*  background-color: green;*/
-  position: absolute;
-  background-image: url("./images/bilbo.png");
-  background-size: cover;
+p{
+  font-size: 30px;
+  margin: 10px;
 }
 
-.orc{
-  position: absolute;
-  background-image: url("./images/orcs1.png");
-  background-size: cover;
+#intro .button {
+  font-size: 30px;
+  color: black;
+  text-decoration: none;
+  padding: 20px;
+  background-color: #C08E387D;
+  border: black 2px solid;
+  border-radius: 20px;
+  margin: 10px;
 }
 
-.weapon{
-  position: absolute;
-  background-image: url("./images/arc.png");
-  background-size: 100%;
+#intro a:hover {
+  color: brown;
+  background-color: #C08E385C ;
+  border: #C08E387D 2px solid;
+  border-radius: 20px;
 }
 
-.bullet {
-  position: absolute;
-  bottom: 40px;
-  left: 51%;
-  background-color: black;
-  background-size: contain;
-  background-repeat: no-repeat;
+img {
+  width: 60px;
+  height:60px;
 }

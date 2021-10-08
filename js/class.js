@@ -6,7 +6,10 @@ class Mission {
     this.orcsArr = [];
     this.weaponArr = [];
     this.bulletArr=[];
-    this.points = 10;
+    this.runes = 10;
+    this.initialMinutes = 1;
+    this.time = this.initialMinutes * 60;
+    this.countdownElm = document.getElementById("countdown");
   }
 
   startMission(){
@@ -16,7 +19,8 @@ class Mission {
     this.addEventListeners();
     this.updateObstacle();
     this.updateWeapon();
-   // this.shooting();
+    this.shooting();
+    this.countdown();
 
     setInterval(()=> {
       this.currentTime++;
@@ -26,8 +30,8 @@ class Mission {
       this.updateWeapon();
 
       //scores record
-      if (this.points > 0){
-        document.getElementById("points").innerHTML = `Score: ${this.points} points`;
+      if (this.runes > 0){
+        document.getElementById("runes").innerHTML = `Score: ${this.runes} runes`;
       } else {
         //alert ("Game Over")
       }
@@ -81,7 +85,7 @@ class Mission {
       if (orc.y <= 90){
         if (this.hobbit.x < orc.x + orc.width && this.hobbit.x + this.hobbit.width > orc.x && orc.y < this.hobbit.y + this.hobbit.height && orc.y + orc.height > this.hobbit.y){
           console.log ("Run Hobbit!")
-          this.points = this.points - 2;
+          this.runes = this.runes - 2;
           orc.remove();
           this.orcsArr.splice(index,1);
         }
@@ -107,8 +111,8 @@ class Mission {
     //Hobbit-weapon collision detection
     this.weaponArr.forEach((weapon, index)=>{
       if (this.hobbit.x< weapon.x + weapon.width && this.hobbit.x + this.hobbit.width > weapon.x && weapon.y < this.hobbit.y + this.hobbit.height && weapon.y + weapon.height >this.hobbit.y){
-        console.log("Great you've got 10 points!")
-        this.points = this.points + 10;
+        console.log("Great you've got 10 runes!")
+        this.runes = this.runes + 10;
         weapon.remove();
         this.weaponArr.splice(index,1);
       }
@@ -124,23 +128,43 @@ class Mission {
 
         this.orcsArr.forEach((orc, oIndex)=>{
           if (bullet.x < orc.x + orc.width && bullet.x + bullet.width > orc.x && orc.y < bullet.y + bullet.height && orc.y + orc.height > bullet.y){
-            console.log ("You now have 5 points")
-            this.points = this.points + 5;
+            console.log ("You now have 5 runes")
+            this.runes = this.runes + 5;
             orc.remove();
             this.orcsArr.splice(oIndex, 1);
             bullet.remove();
             this.bulletArr.splice(bIndex,1);
           }
         })
-
-        if (bullet.y = 0) {
+        if (bullet.y <5 || bullet.y === 0) {
           bullet.remove();
           this.bulletArr.shift();
         }
       })
-    }, 200);
+    }, 100);
   }
 
+  /*song(){
+   const audio = new Soundtrack ();
+   audio.play();
+  }*/
+
+  countdown(){
+    let minutes
+    let seconds
+    //check if minutes has run out (0:00) > countdown, === display game over msg update
+    // I want the interval to work if:
+    setInterval(()=>{
+      minutes = Math.floor(this.time/60);
+      seconds = this.time % 60;
+      this.countdownElm.innerHTML = (`${minutes} : ${seconds}`);
+      this.time--;
+      if (minutes ===0 && seconds ===0){
+        alert (this.runes)
+      }
+    },1000)
+    
+  }
 }
 
 class Components {
@@ -241,5 +265,16 @@ class Bullet extends Components {
     if (this.y > 0){
       this.y-= 5;
     }
+  }
+}
+
+/*class Soundtrack {
+  constructor(){
+    this.audio = loadSound("Concerning-Hobbits.mp3")
+  }
+}*/
+
+class Countdown {
+  constructor(){
   }
 }
