@@ -22,7 +22,7 @@ class Mission {
     this.updateWeapon();
     this.shooting();
     this.countdown();
-    
+
     setInterval(()=> {
       this.currentTime++;
 
@@ -159,7 +159,6 @@ class Mission {
         //this.time--;
         if (seconds>=0){
           this.time--;
-          console.log(this.time)
           this.countdownElm.innerHTML = (`Timer: ${minutes} : ${seconds}`);
         } else {
           this.time = 1;
