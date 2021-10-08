@@ -205,7 +205,7 @@ class Hobbit extends Components {
   constructor (){
     super ();
     this.width= 5;
-    this.height= 10;
+    this.height= 15;
     this.x = 45;
     this.y = 45;
     this.className = "hobbit";
