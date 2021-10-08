@@ -12,33 +12,35 @@ class Mission {
     this.countdownElm = document.getElementById("countdown");
   }
 
+  //Load the game and its basic components
   startMission(){
     this.hobbit = new Hobbit();
     this.hobbit.create();
     this.hobbit.draw();
     this.addEventListeners();
-    this.updateObstacle();
+    this.updateOrcs();
     this.updateWeapon();
     this.shooting();
     this.countdown();
-
+    
     setInterval(()=> {
       this.currentTime++;
 
-      this.updateObstacle();
+      this.updateOrcs();
 
       this.updateWeapon();
 
-      //scores record
-      if (this.runes > 0){
-        document.getElementById("runes").innerHTML = `Score: ${this.runes} runes`;
+      //runes record
+      if (this.runes >=1){
+        document.getElementById("runes").innerHTML = `Total runes: ${this.runes}`;
       } else {
-        //alert ("Game Over")
+        document.getElementById("runes").innerHTML = "Total runes: 0";
+        this.restartBtn();
       }
     },300)
   }
 
-  //to read which arrow is pressed
+  //Activate actions with pressed keys
   addEventListeners(){
     document.addEventListener("keydown",(event) =>{
       if(event.key === "ArrowLeft") {
@@ -69,9 +71,9 @@ class Mission {
     })
   }
 
-  updateObstacle(){
+  updateOrcs(){
     //Orcs apppearance
-    if (this.currentTime % 8 === 0){
+    if (this.currentTime % 5 === 0){
       const newOrc = new Orc ();
       newOrc.create();
       this.orcsArr.push(newOrc);
@@ -82,12 +84,14 @@ class Mission {
       orc.draw();
 
       //orc-hobbit colission detection
-      if (orc.y <= 90){
+      if (orc.y <= 86){
         if (this.hobbit.x < orc.x + orc.width && this.hobbit.x + this.hobbit.width > orc.x && orc.y < this.hobbit.y + this.hobbit.height && orc.y + orc.height > this.hobbit.y){
           console.log ("Run Hobbit!")
-          this.runes = this.runes - 2;
-          orc.remove();
-          this.orcsArr.splice(index,1);
+          if (this.runes>=2){
+            this.runes = this.runes - 2;
+            orc.remove();
+            this.orcsArr.splice(index,1);
+          }
         }
       } else {
           orc.remove();
@@ -121,7 +125,7 @@ class Mission {
 
   shooting (){
     setInterval(() => {
-      //Bullet-orc collision detection bullet-orc
+      //Bullet-orc collision detection
       this.bulletArr.forEach((bullet, bIndex)=>{
         bullet.bulletUp();
         bullet.draw();
@@ -141,29 +145,36 @@ class Mission {
           this.bulletArr.shift();
         }
       })
-    }, 100);
+    }, 250);
   }
 
-  /*song(){
-   const audio = new Soundtrack ();
-   audio.play();
-  }*/
-
   countdown(){
-    let minutes
-    let seconds
-    //check if minutes has run out (0:00) > countdown, === display game over msg update
-    // I want the interval to work if:
-    setInterval(()=>{
-      minutes = Math.floor(this.time/60);
-      seconds = this.time % 60;
-      this.countdownElm.innerHTML = (`${minutes} : ${seconds}`);
-      this.time--;
-      if (minutes ===0 && seconds ===0){
-        alert (this.runes)
+    //Countdown the duration of Bilbo's mission
+    let minutes = 0;
+    let seconds = 0;
+    let timer = setInterval(()=>{
+        minutes = Math.floor(this.time/60);
+        seconds = this.time % 60;
+        seconds = seconds < 10 ? '0' + seconds:seconds;
+        //this.time--;
+        if (seconds>=0){
+          this.time--;
+          console.log(this.time)
+          this.countdownElm.innerHTML = (`Timer: ${minutes} : ${seconds}`);
+        } else {
+          this.time = 1;
+          this.restartBtn();
       }
     },1000)
-    
+  }
+
+  restartBtn(){
+    if (confirm(`You got ${this.runes} runes!
+    Quite ready for another adventure?`)) {
+      window.location.reload();
+    } else {
+      alert ("“So Comes Snow After Fire, And Even Dragons Have Their Ending.”")
+  }
   }
 }
 
@@ -195,8 +206,8 @@ class Hobbit extends Components {
     super ();
     this.width= 5;
     this.height= 10;
-    this.x = 40;
-    this.y = 50;
+    this.x = 45;
+    this.y = 45;
     this.className = "hobbit";
     this.speed = 3;
   }
@@ -208,18 +219,18 @@ class Hobbit extends Components {
   }
 
   moveDown(){
-    if (this.y + this.height <100) {
+    if (this.y + this.height <99) {
       this.y += this.speed;
     }
   }
 
   moveLeft(){
-    if (this.x>0){
+    if (this.x>1){
       this.x-= this.speed
     }
   }
   moveRight(){
-    if (this.x + this.width <100) {
+    if (this.x + this.width <=97) {
       this.x += this.speed;
     }
   }
@@ -254,8 +265,8 @@ class Weapon extends Components{
 class Bullet extends Components {
   constructor(x, y){
     super();
-    this.width= 2;
-    this.height= 5;
+    this.width= 5;
+    this.height= 6;
     this.x= x;
     this.y= y;
     this.className = "bullet";
@@ -265,16 +276,5 @@ class Bullet extends Components {
     if (this.y > 0){
       this.y-= 5;
     }
-  }
-}
-
-/*class Soundtrack {
-  constructor(){
-    this.audio = loadSound("Concerning-Hobbits.mp3")
-  }
-}*/
-
-class Countdown {
-  constructor(){
   }
 }

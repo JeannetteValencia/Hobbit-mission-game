@@ -1,5 +1,5 @@
 body {
-  margin: 50px;
+  margin: 40px;
   background-image: url("../images/middle-earth.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
@@ -10,15 +10,20 @@ body {
   align-items: center;
   flex-direction: row;
   justify-content: space-evenly;
+  background-image: url("../images/background.jpg");
+  border-radius: 30px;
 }
 
 .top-header {
-  background: #C08E385C;
-  padding: 30px;
+  background: #C08E38BF;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 20px;
 }
 
 h1{
   color:brown;
+  padding: 20px;
 }
 
 #board {
@@ -32,7 +37,6 @@ h1{
 }
 
 .hobbit{
-/*  background-color: green;*/
   position: absolute;
   background-image: url("../images/bilbo.png");
   background-size: cover;
@@ -47,14 +51,15 @@ h1{
 .weapon{
   position: absolute;
   background-image: url("../images/arc.png");
-  background-size: 100%;
+  background-size: 115%;
 }
 
 .bullet {
   position: absolute;
   bottom: 40px;
   left: 51%;
-  background-color: black;
+  background-image: url("../images/rock.png");
   background-size: contain;
   background-repeat: no-repeat;
+  border-radius: 50%;
 }
